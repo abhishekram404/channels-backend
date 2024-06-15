@@ -17,7 +17,7 @@ export class ChannelService {
 
   async create(payload: CreateChannelDto) {
     const { name, workspaceId } = payload;
-    
+
     const doesWorkspaceExist = await this.workspaceRepository.existsBy({
       id: workspaceId,
     });
@@ -34,6 +34,10 @@ export class ChannelService {
   }
 
   findAll() {
-    return this.channelRepository.find();
+    return this.channelRepository.find({
+      order: {
+        updatedAt: 'desc',
+      },
+    });
   }
 }
