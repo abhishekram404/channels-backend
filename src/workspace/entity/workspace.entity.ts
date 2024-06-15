@@ -18,6 +18,7 @@ export class Workspace {
 
   @Column({
     unique: true,
+    nullable: true,
   })
   code: string;
 
