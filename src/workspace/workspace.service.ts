@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Channel } from 'src/channel/entity/channel.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { Workspace } from './entity/workspace.entity';
 
@@ -35,5 +35,11 @@ export class WorkspaceService {
         updatedAt: 'desc',
       },
     });
+  }
+
+  async findOneBy(
+    findOptions: FindOptionsWhere<Workspace> | FindOptionsWhere<Workspace>[],
+  ) {
+    return this.workspaceRepository.findOneBy(findOptions);
   }
 }
