@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { WorkspaceService } from './workspace.service';
 
 @Controller('workspace')
@@ -11,7 +12,7 @@ export class WorkspaceController {
   }
 
   @Post()
-  create(@Body() payload) {
+  create(@Body() payload: CreateWorkspaceDto) {
     return this.workspaceService.create(payload);
   }
 }
