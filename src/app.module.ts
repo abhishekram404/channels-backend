@@ -21,7 +21,7 @@ ConfigModule.forRoot();
       database: process.env.DB_NAME,
       synchronize: true,
       logging: true,
-      entities: [join(__dirname, '**', '*.entity.{ts,js}')],
+      autoLoadEntities: true,
     }),
     UserModule,
     ChannelModule,
