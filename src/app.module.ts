@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './user/user.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { ChannelModule } from './channel/channel.module';
+import { UserModule } from './user/user.module';
+import { WorkspaceModule } from './workspace/workspace.module';
 
 ConfigModule.forRoot();
 
@@ -24,6 +25,7 @@ ConfigModule.forRoot();
     }),
     UserModule,
     ChannelModule,
+    WorkspaceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
