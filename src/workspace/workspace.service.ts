@@ -31,6 +31,9 @@ export class WorkspaceService {
       relations: {
         channels: true,
       },
+      order: {
+        updatedAt: 'desc',
+      },
     });
   }
 }
