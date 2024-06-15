@@ -22,4 +22,9 @@ export class WorkspaceController {
       id: workspaceId,
     });
   }
+
+  @Get(':workspaceId/channels')
+  findChannels(@Param('workspaceId') workspaceId: number) {
+    return this.workspaceService.findWorkspaceChannels(workspaceId);
+  }
 }

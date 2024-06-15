@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Channel } from 'src/channel/entity/channel.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
@@ -41,5 +41,21 @@ export class WorkspaceService {
     findOptions: FindOptionsWhere<Workspace> | FindOptionsWhere<Workspace>[],
   ) {
     return this.workspaceRepository.findOneBy(findOptions);
+  }
+
+  async findWorkspaceChannels(workspaceId: number) {
+    const workspace = await this.workspaceRepository.findOne({
+      where: {
+        id: workspaceId,
+      },
+      relations: {
+        channels: true,
+      },
+    });
+
+    if (!workspace)
+      throw new BadRequestException('No workspace exists with the given ID.');
+
+    return workspace.channels;
   }
 }
