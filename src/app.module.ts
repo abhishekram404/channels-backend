@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
+import { ChannelModule } from './channel/channel.module';
 
 ConfigModule.forRoot();
 
@@ -22,6 +23,7 @@ ConfigModule.forRoot();
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
     }),
     UserModule,
+    ChannelModule,
   ],
   controllers: [AppController],
   providers: [AppService],
