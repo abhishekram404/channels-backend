@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { ChannelModule } from './channel/channel.module';
 import { UserModule } from './user/user.module';
 import { WorkspaceModule } from './workspace/workspace.module';
+import { AuthModule } from './auth/auth.module';
 
 ConfigModule.forRoot();
 
@@ -26,6 +27,7 @@ ConfigModule.forRoot();
     UserModule,
     ChannelModule,
     WorkspaceModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
