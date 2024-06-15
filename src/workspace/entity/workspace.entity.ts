@@ -26,7 +26,9 @@ export class Workspace {
   })
   logoUrl: string;
 
-  @OneToMany(() => Channel, (channel) => channel.workspace)
+  @OneToMany(() => Channel, (channel) => channel.workspace, {
+    cascade: true,
+  })
   channels: Channel[];
 
   @CreateDateColumn()
