@@ -1,7 +1,9 @@
+import { Channel } from 'src/channel/entity/channel.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -23,6 +25,9 @@ export class Workspace {
     nullable: true,
   })
   logoUrl: string;
+
+  @OneToMany(() => Channel, (channel) => channel.workspace)
+  channels: Channel[];
 
   @CreateDateColumn()
   createdAt: Date;
