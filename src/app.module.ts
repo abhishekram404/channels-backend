@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
 
 ConfigModule.forRoot();
 
@@ -20,6 +21,7 @@ ConfigModule.forRoot();
       logging: true,
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
     }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
