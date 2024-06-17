@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcrypt';
 import {
   BeforeInsert,
   Column,
@@ -6,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class User {
@@ -26,7 +26,23 @@ export class User {
   @Column({
     nullable: true,
   })
+  displayName: string;
+
+  @Column({
+    nullable: true,
+  })
   avatarUrl: string;
+
+  @Column({
+    unique: true,
+    nullable: true,
+  })
+  email: string;
+
+  @Column({
+    default: false,
+  })
+  isEmailVerified: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
