@@ -1,3 +1,4 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -12,7 +13,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env'],
-      isGlobal: true
+      isGlobal: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -24,6 +25,19 @@ import { WorkspaceModule } from './workspace/workspace.module';
       synchronize: true,
       logging: true,
       autoLoadEntities: true,
+    }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.SMTP_HOST,
+        port: +process.env.SMTP_PORT,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      },
+      defaults: {
+        from: process.env.MAIL_DEFAULT_FROM,
+      },
     }),
     UserModule,
     ChannelModule,
