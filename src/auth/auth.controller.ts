@@ -20,4 +20,11 @@ export class AuthController {
     await this.authService.signup(body);
     return 'Signup successful. An OTP has been send to your registered email.';
   }
+
+  @Public()
+  @Post('verify')
+  async verify(@Body() body: { email: string; otp: string }) {
+    await this.authService.verifyOtp(body);
+    return 'Email verified successfully.';
+  }
 }

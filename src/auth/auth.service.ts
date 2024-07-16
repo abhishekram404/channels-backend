@@ -12,6 +12,7 @@ import { User } from 'src/user/entity/user.entity';
 import { Repository } from 'typeorm';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignupDto } from './dto/sign-up.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { OtpVerification } from './entity/otp-verification.entity';
 
 @Injectable()
@@ -28,13 +29,20 @@ export class AuthService {
   async signIn(credentials: SignInDto) {
     const { username, password } = credentials;
     const user = await this.userRepository.findOne({
-      where: {
-        username,
-      },
+      where: [
+        {
+          username,
+        },
+        {
+          email: username,
+        },
+      ],
       select: {
         id: true,
         username: true,
+        email: true,
         password: true,
+        isEmailVerified: true,
       },
     });
 
@@ -92,7 +100,7 @@ export class AuthService {
     const otp = this.otpVerificationRepository.create({
       user: newUser,
       otpHash,
-      expiredAt: expiryDate,
+      expiresAt: expiryDate,
     });
 
     await this.otpVerificationRepository.save(otp);
@@ -103,5 +111,55 @@ export class AuthService {
     });
 
     return newUser;
+  }
+
+  async verifyOtp(payload: VerifyOtpDto) {
+    const { email, otp } = payload;
+
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException("Emails doesn't exist. Please sign up.");
+    }
+
+    if (user.isEmailVerified) {
+      throw new BadRequestException('Email already verified.');
+    }
+
+    const otpVerification = await this.otpVerificationRepository.findOne({
+      where: {
+        user: {
+          email,
+        },
+      },
+    });
+
+    if (!otpVerification) {
+      throw new BadRequestException('Invalid OTP.');
+    }
+
+    const isOtpValid = await bcrypt.compare(otp, otpVerification.otpHash);
+
+    if (!isOtpValid) {
+      throw new BadRequestException('OTP is incorrect.');
+    }
+
+    const currentDate = new Date();
+    if (currentDate > otpVerification.expiresAt) {
+      throw new BadRequestException('OTP has expired.');
+    }
+
+    user.isEmailVerified = true;
+    await this.userRepository.save(user);
+
+    await this.otpVerificationRepository.delete({
+      id: otpVerification.id,
+    });
+
+    return user;
   }
 }
